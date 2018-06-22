@@ -30,6 +30,7 @@ public class DatabaseUtils {
     private static final String LARGEIMAGE = "LARGEIMAGE";
     private static final String SELFLINK = "SELFLINK";
     private static final String IMAGE = "IMAGE";
+    private static final String PATHS = "PATHS";
 
     private Context context;
     private SQLiteDatabase database;
@@ -109,6 +110,18 @@ public class DatabaseUtils {
         return check;
     }
 
+    public boolean checkExistsBm(ItemBook item){
+        ArrayList<ItemBook> arrItem = getBM();
+        boolean check = false;
+        for (int i=0; i<arrItem.size(); i++){
+            if (arrItem.get(i).getSmallImage().equals(item.getSmallImage())){
+                check = true;
+                break;
+            }
+        }
+        return check;
+    }
+
     public ArrayList<ItemBook> getBM() {
         ArrayList<ItemBook> arr = new ArrayList<>();
         openDatabase();
@@ -118,13 +131,15 @@ public class DatabaseUtils {
         int indexAUTHOR = cursor.getColumnIndex(AUTHOR);
         int indexDESC = cursor.getColumnIndex(DESC);
         int indexIMAGE = cursor.getColumnIndex(IMAGE);
+        int indexURL = cursor.getColumnIndex(PATHS);
 
         while (!cursor.isAfterLast()) {
             String title = cursor.getString(indexTITLE);
             String author = cursor.getString(indexAUTHOR);
             String desc = cursor.getString(indexDESC);
             String image = cursor.getString(indexIMAGE);
-            ItemBook book = new ItemBook(title,author,desc,image,image,"");
+            String url = cursor.getString(indexURL);
+            ItemBook book = new ItemBook(title,author,desc,image,image,url);
             arr.add(book);
             cursor.moveToNext();
         }
@@ -152,6 +167,7 @@ public class DatabaseUtils {
         values.put(AUTHOR, item.getAuthor());
         values.put(DESC, item.getDesc());
         values.put(IMAGE, item.getSmallImage());
+        values.put(PATHS, item.getSelfLink());
         openDatabase();
         long id = database.insert(TABLE_NAME_BM, null, values);
         closeDatabase();

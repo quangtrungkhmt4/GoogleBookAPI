@@ -11,6 +11,7 @@ import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,12 +28,16 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvTitle;
     private TextView tvAuthor;
     private TextView tvDesc;
+    private Button btnRead;
 
     private Toolbar toolbar;
     private ImageView imFav;
     private boolean checkFav;
+    private boolean checkBookmark;
     private DatabaseUtils databaseUtils;
     private ItemBook itemBook;
+    private ImageView imAddBookmark;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
         viewGroup = findViewById(R.id.ln);
         toolbar = findViewById(R.id.toolBarInfo);
         imFav = findViewById(R.id.imFavInfo);
+        imAddBookmark = findViewById(R.id.imAddBmInfo);
     }
 
     private void loadData() {
@@ -68,9 +74,24 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
             checkFav = false;
         }
 
+        boolean checkExistsBm = databaseUtils.checkExistsBm(itemBook);
+        if (checkExistsBm){
+            imAddBookmark.setImageResource(R.drawable.ic_remove_bookmark);
+            checkExistsBm = true;
+        }else {
+            imAddBookmark.setImageResource(R.drawable.ic_add_bookmark);
+            checkExistsBm = false;
+        }
+        path = itemBook.getSelfLink();
+        if(path.contains(".pdf")){
+            btnRead.setVisibility(View.VISIBLE);
+        }else {
+            btnRead.setVisibility(View.INVISIBLE);
+        }
+
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ResourceAsColor"})
     private void initViews() {
         setSupportActionBar(toolbar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -83,8 +104,6 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
             Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         }
 
-        imFav.setOnClickListener(this);
-
         imBook = new ImageView(this);
         tvTitle = new TextView(this);
         tvAuthor = new TextView(this);
@@ -92,6 +111,18 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
         TextView title = new TextView(this);
         TextView author = new TextView(this);
         TextView desc = new TextView(this);
+        btnRead = new Button(this);
+
+        imFav.setOnClickListener(this);
+        imAddBookmark.setOnClickListener(this);
+        btnRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(InfoBookActivity.this,PdfViewActivity.class);
+                intent.putExtra("path",path);
+                startActivity(intent);
+            }
+        });
 
         Display display = getWindowManager().getDefaultDisplay();
         int screenHeight = display.getHeight();
@@ -104,6 +135,12 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
 
         ViewGroup.LayoutParams lpText = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
                 , ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams lpButton = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+                , ViewGroup.LayoutParams.WRAP_CONTENT);
+        btnRead.setLayoutParams(lpButton);
+        btnRead.setBackgroundResource(R.drawable.custom_button_read);
+        btnRead.setText("READ");
+        btnRead.setTextColor(R.color.colorPrimaryDark);
 
         tvTitle.setLayoutParams(lpText);
         tvAuthor.setLayoutParams(lpText);
@@ -132,6 +169,7 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
         viewGroup.addView(tvAuthor);
         viewGroup.addView(desc);
         viewGroup.addView(tvDesc);
+        viewGroup.addView(btnRead);
 
         ViewGroup.MarginLayoutParams marginTvTitle = (ViewGroup.MarginLayoutParams) tvTitle.getLayoutParams();
         marginTvTitle.setMargins(50, 20, 0, 0);
@@ -150,6 +188,9 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
 
         ViewGroup.MarginLayoutParams marginDesc = (ViewGroup.MarginLayoutParams) desc.getLayoutParams();
         marginDesc.setMargins(20, 20, 0, 0);
+
+        ViewGroup.MarginLayoutParams marginButton = (ViewGroup.MarginLayoutParams) btnRead.getLayoutParams();
+        marginButton.setMargins(50, 20, 50, 0);
 
 
     }
@@ -170,9 +211,22 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
                 if (!checkFav){
                     databaseUtils.insertFAV(itemBook);
                     imFav.setImageResource(R.drawable.icon_fav);
+                    checkFav = true;
                 }else {
                     databaseUtils.deleteFAV(itemBook.getSelfLink());
                     imFav.setImageResource(R.drawable.icon_fav_uncheck);
+                    checkFav = false;
+                }
+                break;
+            case R.id.imAddBmInfo:
+                if (!checkBookmark){
+                    databaseUtils.insertBM(itemBook);
+                    imAddBookmark.setImageResource(R.drawable.ic_remove_bookmark);
+                    checkBookmark = true;
+                }else {
+                    databaseUtils.deleteBM(itemBook.getSmallImage());
+                    imAddBookmark.setImageResource(R.drawable.ic_add_bookmark);
+                    checkBookmark = false;
                 }
                 break;
         }

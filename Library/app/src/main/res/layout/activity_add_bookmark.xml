@@ -113,6 +113,44 @@
                     android:layout_height="100dp" />
             </FrameLayout>
 
+            <TextView
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                style="?android:attr/textAppearanceMedium"
+                android:text="PDF File"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/edtPathPdf"
+                    android:hint="Path..."
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="10"
+                    android:inputType="text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/btnSelectPathPdf"
+                    android:padding="10dp"
+                    android:background="@drawable/custom_button"
+                    android:text="select"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
             <Button
                 android:textColor="@color/colorIcon"
                 android:id="@+id/btnCreateBm"

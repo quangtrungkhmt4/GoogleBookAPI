@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.quang.library.model.ItemBook;
 import com.example.quang.library.utils.DatabaseUtils;
@@ -29,6 +30,9 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
     private Button btnCreate;
 
     private String imagePath = "";
+
+    private EditText edtPathPdf;
+    private Button btnSelectPathPdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
         edtDesc = findViewById(R.id.edtDesc);
         imBook = findViewById(R.id.imAddImage);
         btnCreate = findViewById(R.id.btnCreateBm);
+        edtPathPdf = findViewById(R.id.edtPathPdf);
+        btnSelectPathPdf = findViewById(R.id.btnSelectPathPdf);
     }
 
     private void loadData() {
@@ -64,6 +70,7 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
 
         imBook.setOnClickListener(this);
         btnCreate.setOnClickListener(this);
+        btnSelectPathPdf.setOnClickListener(this);
     }
 
     @Override
@@ -79,10 +86,15 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
                     return;
                 }
                 ItemBook itemBook = new ItemBook(edtTitle.getText().toString(),"[\""+edtAuthor.getText()+"\"]"
-                    ,edtDesc.getText().toString(),imagePath,imagePath,"");
+                    ,edtDesc.getText().toString(),imagePath,imagePath,edtPathPdf.getText().toString());
                 DatabaseUtils databaseUtils = new DatabaseUtils(this);
-                databaseUtils.insertBM(itemBook);
+                long check = databaseUtils.insertBM(itemBook);
                 finish();
+                break;
+            case R.id.btnSelectPathPdf:
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                startActivityForResult(intent, 0);
                 break;
         }
     }
@@ -96,6 +108,12 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
                     Uri selectedImage = data.getData();
                     imagePath = getRealPathFromURI(selectedImage);
                     imBook.setImageURI(selectedImage);
+                }
+                break;
+            case 0:
+                if(resultCode == RESULT_OK){
+                    String path = data.getData().getPath();
+                    edtPathPdf.setText(path);
                 }
                 break;
         }
