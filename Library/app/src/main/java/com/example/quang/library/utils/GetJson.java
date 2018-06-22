@@ -91,8 +91,7 @@ public class GetJson extends AsyncTask<String,Void, ArrayBook> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                ArrayBook arrayBook = new ArrayBook(arrBook);
-                return arrayBook;
+                return new ArrayBook(arrBook);
             }
 
 

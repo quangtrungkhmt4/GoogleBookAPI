@@ -31,24 +31,14 @@ public class ItemBook implements Serializable{
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
 
     public String getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 
     public String getSmallImage() {
         return smallImage;
-    }
-
-    public void setSmallImage(String smallImage) {
-        this.smallImage = smallImage;
     }
 
     public String getLargeImage() {
@@ -63,7 +53,4 @@ public class ItemBook implements Serializable{
         return selfLink;
     }
 
-    public void setSelfLink(String selfLink) {
-        this.selfLink = selfLink;
-    }
 }

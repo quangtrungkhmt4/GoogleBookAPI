@@ -1,12 +1,12 @@
 package com.example.quang.library.utils;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
-import com.example.quang.library.model.ArrayBook;
 import com.example.quang.library.model.ItemBook;
 
 import java.io.File;
@@ -16,20 +16,20 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class DatabaseUtils {
-    public static final String PATH = Environment.getDataDirectory().getPath()
+    private static final String PATH = Environment.getDataDirectory().getPath()
             + "/data/com.example.quang.library/databases/";
 
-    public static final String DB_NAME = "library.sqlite";
-    public static final String TABLE_NAME_FAV = "TBLFAVORITE";
-    public static final String TABLE_NAME_BM = "TBLBOOKMARK";
-    public static final String ID = "ID";
-    public static final String TITLE = "TITLE";
-    public static final String AUTHOR = "AUTHOR";
-    public static final String DESC = "DESC";
-    public static final String SMALLIMAGE = "SMALLIMAGE";
-    public static final String LARGEIMAGE = "LARGEIMAGE";
-    public static final String SELFLINK = "SELFLINK";
-    public static final String IMAGE = "IMAGE";
+    private static final String DB_NAME = "library.sqlite";
+    private static final String TABLE_NAME_FAV = "TBLFAVORITE";
+    private static final String TABLE_NAME_BM = "TBLBOOKMARK";
+    private static final String ID = "ID";
+    private static final String TITLE = "TITLE";
+    private static final String AUTHOR = "AUTHOR";
+    private static final String DESC = "DESC";
+    private static final String SMALLIMAGE = "SMALLIMAGE";
+    private static final String LARGEIMAGE = "LARGEIMAGE";
+    private static final String SELFLINK = "SELFLINK";
+    private static final String IMAGE = "IMAGE";
 
     private Context context;
     private SQLiteDatabase database;
@@ -72,10 +72,9 @@ public class DatabaseUtils {
     public ArrayList<ItemBook> getFav() {
         ArrayList<ItemBook> arr = new ArrayList<>();
         openDatabase();
-        Cursor cursor = database.query(TABLE_NAME_FAV, null, null, null, null, null, null);
+        @SuppressLint("Recycle") Cursor cursor = database.query(TABLE_NAME_FAV, null, null, null, null, null, null);
         cursor.moveToFirst();
 
-        int indexId = cursor.getColumnIndex(ID);
         int indexTITLE = cursor.getColumnIndex(TITLE);
         int indexAUTHOR = cursor.getColumnIndex(AUTHOR);
         int indexDESC = cursor.getColumnIndex(DESC);
@@ -83,8 +82,7 @@ public class DatabaseUtils {
         int indexLARGEIMAGE = cursor.getColumnIndex(LARGEIMAGE);
         int indexSELFLINK = cursor.getColumnIndex(SELFLINK);
 
-        while (cursor.isAfterLast() == false) {
-            int id = cursor.getInt(indexId);
+        while (!cursor.isAfterLast()) {
             String title = cursor.getString(indexTITLE);
             String author = cursor.getString(indexAUTHOR);
             String desc = cursor.getString(indexDESC);
@@ -114,17 +112,14 @@ public class DatabaseUtils {
     public ArrayList<ItemBook> getBM() {
         ArrayList<ItemBook> arr = new ArrayList<>();
         openDatabase();
-        Cursor cursor = database.query(TABLE_NAME_BM, null, null, null, null, null, null);
+        @SuppressLint("Recycle") Cursor cursor = database.query(TABLE_NAME_BM, null, null, null, null, null, null);
         cursor.moveToFirst();
-
-        int indexId = cursor.getColumnIndex(ID);
         int indexTITLE = cursor.getColumnIndex(TITLE);
         int indexAUTHOR = cursor.getColumnIndex(AUTHOR);
         int indexDESC = cursor.getColumnIndex(DESC);
         int indexIMAGE = cursor.getColumnIndex(IMAGE);
 
-        while (cursor.isAfterLast() == false) {
-            int id = cursor.getInt(indexId);
+        while (!cursor.isAfterLast()) {
             String title = cursor.getString(indexTITLE);
             String author = cursor.getString(indexAUTHOR);
             String desc = cursor.getString(indexDESC);

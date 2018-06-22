@@ -1,7 +1,9 @@
 package com.example.quang.library;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.example.quang.library.model.ItemBook;
 import com.example.quang.library.utils.DatabaseUtils;
 
+import java.util.Objects;
+
 public class InfoBookActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView imBook;
@@ -23,10 +27,6 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
     private TextView tvTitle;
     private TextView tvAuthor;
     private TextView tvDesc;
-
-    private TextView title;
-    private TextView author;
-    private TextView desc;
 
     private Toolbar toolbar;
     private ImageView imFav;
@@ -70,11 +70,18 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initViews() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+        }
 
         imFav.setOnClickListener(this);
 
@@ -82,9 +89,9 @@ public class InfoBookActivity extends AppCompatActivity implements View.OnClickL
         tvTitle = new TextView(this);
         tvAuthor = new TextView(this);
         tvDesc = new TextView(this);
-        title = new TextView(this);
-        author = new TextView(this);
-        desc = new TextView(this);
+        TextView title = new TextView(this);
+        TextView author = new TextView(this);
+        TextView desc = new TextView(this);
 
         Display display = getWindowManager().getDefaultDisplay();
         int screenHeight = display.getHeight();

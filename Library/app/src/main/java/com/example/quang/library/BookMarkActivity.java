@@ -18,13 +18,13 @@ import com.example.quang.library.model.ItemBook;
 import com.example.quang.library.utils.DatabaseUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BookMarkActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener, AdapterView.OnItemLongClickListener {
 
     private Toolbar toolbar;
     private ListView lvBook;
     private ArrayList<ItemBook> arrBook;
-    private ListViewBooksAdapter adapter;
 
     private DatabaseUtils databaseUtils;
 
@@ -53,10 +53,14 @@ public class BookMarkActivity extends AppCompatActivity implements AdapterView.O
 
     private void initViews() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        }
 
-        adapter = new ListViewBooksAdapter(this,R.layout.item_listview_books,arrBook);
+        ListViewBooksAdapter adapter = new ListViewBooksAdapter(this, R.layout.item_listview_books, arrBook);
         lvBook.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

@@ -31,6 +31,7 @@ import com.example.quang.library.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
     private ListView lvCatalogue;
-    private ListViewCatalogueAdapter adapterCata;
     private String[] arrCatalogue = new String[]{"Android", "AngularJS", "Arduino", "ASP.NET", "Bootstrap"
     , "C#", "Entity", "Framework", "Hibernate", "HTML", "CSS", "iOS", "Java", "JavaScript", "Jquery", "Laravel"
     , "LINQ", "MongoDB", "MySql", "NodeJS", "Oracle", "PHP", "Python", "React", "Sql", "Server", "Swift"};
@@ -85,8 +85,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void initViews() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        }
 
         toggle = new ActionBarDrawerToggle(this,drawerLayout,0,0){
             @Override
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        adapterCata = new ListViewCatalogueAdapter(this,R.layout.item_listview_catalogue,arrCatalogue);
+        ListViewCatalogueAdapter adapterCata = new ListViewCatalogueAdapter(this, R.layout.item_listview_catalogue, arrCatalogue);
         lvCatalogue.setAdapter(adapterCata);
         adapterCata.notifyDataSetChanged();
 
@@ -199,9 +203,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void initDialogProgress() {
         dialogProgress = new Dialog(this);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialogProgress.getWindow().getAttributes());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            lp.copyFrom(Objects.requireNonNull(dialogProgress.getWindow()).getAttributes());
+        }
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        dialogProgress.getWindow().setAttributes(lp);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(dialogProgress.getWindow()).setAttributes(lp);
+        }
         dialogProgress.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogProgress.setCancelable(false);
         dialogProgress.setContentView(R.layout.dialog_task_progress);

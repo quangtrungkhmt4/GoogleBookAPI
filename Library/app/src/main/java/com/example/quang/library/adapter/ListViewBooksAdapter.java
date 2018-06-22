@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.quang.library.R;
 import com.example.quang.library.model.ItemBook;
-import com.github.ybq.android.spinkit.style.Circle;
 
 import java.util.ArrayList;
 
@@ -53,22 +52,45 @@ public class ListViewBooksAdapter extends BaseAdapter {
         if(viewRow == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            viewRow = inflater.inflate(layout,viewGroup,false);
+            if (inflater != null) {
+                viewRow = inflater.inflate(layout,viewGroup,false);
+            }
 
             ViewHolder holder = new ViewHolder();
-            holder.tvTitle = viewRow.findViewById(R.id.tvTitleBook);
-            holder.tvAuthor = viewRow.findViewById(R.id.tvAuthorBook);
-            holder.tvDesc = viewRow.findViewById(R.id.tvDescBook);
-            holder.imBook = viewRow.findViewById(R.id.imBooks);
+            if (viewRow != null) {
+                holder.tvTitle = viewRow.findViewById(R.id.tvTitleBook);
+            }
+            if (viewRow != null) {
+                holder.tvAuthor = viewRow.findViewById(R.id.tvAuthorBook);
+            }
+            if (viewRow != null) {
+                holder.tvDesc = viewRow.findViewById(R.id.tvDescBook);
+            }
+            if (viewRow != null) {
+                holder.imBook = viewRow.findViewById(R.id.imBooks);
+            }
 
-            viewRow.setTag(holder);
+            if (viewRow != null) {
+                viewRow.setTag(holder);
+            }
         }
         ItemBook item = arrItem.get(i);
-        ViewHolder holder = (ViewHolder) viewRow.getTag();
-        holder.tvTitle.setText(item.getTitle());
-        holder.tvAuthor.setText(item.getAuthor());
-        holder.tvDesc.setText(item.getDesc());
-        Glide.with(context).load(item.getSmallImage()).into(holder.imBook);
+        ViewHolder holder = null;
+        if (viewRow != null) {
+            holder = (ViewHolder) viewRow.getTag();
+        }
+        if (holder != null) {
+            holder.tvTitle.setText(item.getTitle());
+        }
+        if (holder != null) {
+            holder.tvAuthor.setText(item.getAuthor());
+        }
+        if (holder != null) {
+            holder.tvDesc.setText(item.getDesc());
+        }
+        if (holder != null) {
+            Glide.with(context).load(item.getSmallImage()).into(holder.imBook);
+        }
 
         return viewRow;
     }

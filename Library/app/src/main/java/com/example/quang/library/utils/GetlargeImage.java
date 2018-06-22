@@ -3,17 +3,12 @@ package com.example.quang.library.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.example.quang.library.model.ArrayBook;
-import com.example.quang.library.model.ItemBook;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 
 public class GetlargeImage extends AsyncTask<String,Void, String> {
 

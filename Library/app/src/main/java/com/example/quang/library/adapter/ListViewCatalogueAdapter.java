@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.example.quang.library.R;
 
-import java.util.ArrayList;
-
 public class ListViewCatalogueAdapter extends BaseAdapter {
     private Context context;
     private int layout;
@@ -47,16 +45,27 @@ public class ListViewCatalogueAdapter extends BaseAdapter {
         if(viewRow == null)
         {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            viewRow = inflater.inflate(layout,viewGroup,false);
+            if (inflater != null) {
+                viewRow = inflater.inflate(layout,viewGroup,false);
+            }
 
             ViewHolder holder = new ViewHolder();
-            holder.tvCata = viewRow.findViewById(R.id.tvCata);
+            if (viewRow != null) {
+                holder.tvCata = viewRow.findViewById(R.id.tvCata);
+            }
 
-            viewRow.setTag(holder);
+            if (viewRow != null) {
+                viewRow.setTag(holder);
+            }
         }
         String item = arrItem[i];
-        ViewHolder holder = (ViewHolder) viewRow.getTag();
-        holder.tvCata.setText(item);
+        ViewHolder holder = null;
+        if (viewRow != null) {
+            holder = (ViewHolder) viewRow.getTag();
+        }
+        if (holder != null) {
+            holder.tvCata.setText(item);
+        }
         return viewRow;
     }
 }

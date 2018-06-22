@@ -14,7 +14,4 @@ public class ArrayBook implements Serializable{
         return arrBook;
     }
 
-    public void setArrBook(ArrayList<ItemBook> arrBook) {
-        this.arrBook = arrBook;
-    }
 }

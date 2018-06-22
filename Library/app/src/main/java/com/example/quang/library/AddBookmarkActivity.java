@@ -3,6 +3,7 @@ package com.example.quang.library;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import com.example.quang.library.model.ItemBook;
 import com.example.quang.library.utils.DatabaseUtils;
 
+import java.util.Objects;
+
 public class AddBookmarkActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar toolbar;
@@ -26,8 +29,6 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
     private Button btnCreate;
 
     private String imagePath = "";
-
-    private DatabaseUtils databaseUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +55,12 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
 
     private void initViews() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
+        }
 
         imBook.setOnClickListener(this);
         btnCreate.setOnClickListener(this);
@@ -75,7 +80,7 @@ public class AddBookmarkActivity extends AppCompatActivity implements View.OnCli
                 }
                 ItemBook itemBook = new ItemBook(edtTitle.getText().toString(),"[\""+edtAuthor.getText()+"\"]"
                     ,edtDesc.getText().toString(),imagePath,imagePath,"");
-                databaseUtils = new DatabaseUtils(this);
+                DatabaseUtils databaseUtils = new DatabaseUtils(this);
                 databaseUtils.insertBM(itemBook);
                 finish();
                 break;
